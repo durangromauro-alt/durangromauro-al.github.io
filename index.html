@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Feliz Cumpleaños mi amado hermano!</title>
+    <style>
+        :root {
+            --rosado-fuerte: #ff85a2;
+            --rosado-pastel: #ffc0cb;
+            --celeste: #bde0fe;
+            --blanco: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #fff5f7 0%, #ffe4e9 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        #gift-container {
+            position: fixed;
+            width: 140px;
+            height: 140px;
+            cursor: pointer;
+            z-index: 10;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .gift-box {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--rosado-pastel) 0%, var(--rosado-fuerte) 100%);
+            border-radius: 15px;
+            position: relative;
+            box-shadow: 0 15px 30px rgba(255, 133, 162, 0.4);
+            border: 2px solid white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .ribbon-v {
+            position: absolute;
+            width: 25px;
+            height: 100%;
+            background: var(--celeste);
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+        }
+
+        .ribbon-h {
+            position: absolute;
+            width: 100%;
+            height: 25px;
+            background: var(--celeste);
+            top: 50%;
+            transform: translateY(-50%);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+        }
+
+        #message {
+            position: absolute;
+            top: -60px;
+            width: 250px;
+            text-align: center;
+            font-weight: bold;
+            color: #d16d81;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.1rem;
+            text-shadow: 1px 1px 2px white;
+            pointer-events: none;
+        }
+
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(45, 12, 18, 0.85);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .envelope {
+            width: 280px;
+            height: 180px;
+            background: white;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            transition: transform 0.3s;
+        }
+
+        .envelope:hover { transform: scale(1.1); }
+
+        .seal { font-size: 50px; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2)); }
+
+        #letter {
+            display: none;
+            position: relative;
+            width: 85%;
+            max-width: 450px;
+            background: #fff;
+            padding: 40px;
+            padding-bottom: 100px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .letter-decor {
+            position: absolute;
+            width: 90px;
+            opacity: 0.95;
+            pointer-events: none;
+        }
+
+        .letter-decor.top-left {
+            top: -20px;
+            left: -20px;
+            transform: rotate(-10deg);
+        }
+
+        .letter-decor.top-right {
+            top: -20px;
+            right: -20px;
+            transform: rotate(10deg);
+        }
+
+        .letter-decor.bottom-left {
+            bottom: -20px;
+            left: 20px;
+            width: 70px;
+            transform: rotate(-5deg);
+        }
+
+        .letter-decor.bottom-right {
+            bottom: -20px;
+            right: -20px;
+            transform: rotate(5deg);
+        }
+
+        .signature-row {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .signature-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .letter-content {
+            text-align: justify;
+            line-height: 1.7;
+            color: #444;
+            font-size: 15px;
+        }
+
+        .carousel {
+            display: none;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px dashed var(--celeste);
+            text-align: center;
+        }
+
+        .carousel img {
+            width: 100%;
+            max-width: 450px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .carousel-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .carousel-controls button {
+            background-color: var(--celeste);
+            color: #333;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .carousel-indicator {
+            margin-top: 12px;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .btn-reveal {
+            background-color: var(--rosado-fuerte);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 15px;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .gallery-grid img {
+            width: 100%;
+            height: 110px;
+            object-fit: cover;
+            border-radius: 14px;
+            border: 2px solid rgba(189, 224, 254, 0.5);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+        }
+
+        .gallery-title {
+            margin: 0 0 12px;
+            font-size: 1rem;
+            color: #333;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <audio id="birthdayMusic" src="Music/archivo.mp3"></audio>
+
+    <div id="gift-container">
+        <div id="message">¡Atrápame jejeje! ✨</div>
+        <div class="gift-box">
+            <div class="ribbon-v"></div>
+            <div class="ribbon-h"></div>
+        </div>
+    </div>
+
+    <div id="overlay">
+        <div id="envelope" class="envelope" onclick="openLetter()">
+            <div class="seal">❤️</div>
+            <p style="color: #888; font-family: cursive;">Para: Angaju</p>
+        </div>
+
+        <div id="letter">
+            <img src="¡Feliz Cumpleaños mi amado hermano!_files/deco1.jpeg" alt="" class="letter-decor top-left">
+            <img src="¡Feliz Cumpleaños mi amado hermano!_files/deco2.jpeg" alt="" class="letter-decor top-right">
+            <h2 style="color: green; text-align: center;">¡Feliz Cumpleaños, Bermuan!</h2>
+            <div class="letter-content">
+                <p>En este día tan especial, quiero desearte toda la felicidad del mundo y espero que hayas celebrado rodeado de las personas que más amas. Primero, quiero disculparme por no poder acompañarte hoy; no sabes cuánto me encantaría poder abrazarte. Aunque no pueda estar presente, no quería quedarme de brazos cruzados sin hacerte saber lo importante que eres para mí; no logras dimensionar lo mucho que te quiero.</p>
+                
+                <p>En todo este tiempo de conocerte, aunque no sea mucho, puedo decir que eres la mejor persona que he conocido. En las buenas y en las malas, sé que siempre puedo contar contigo y tú conmigo. ¿Sabes? Me he dado cuenta de que cada persona que se cruza en tu camino se lleva un pedacito de tu esencia: un recuerdo, un detalle o un pensamiento positivo. En mí, has dejado una huella imborrable. Te admiro muchísimo, nunca dudes de ello; eres alguien que siempre busca mejorar, que lucha por salir adelante y que logra emerger de lo más profundo con una sonrisa, a pesar de ser consciente de lo horrible de la sociedad y el mundo; eso te hace mejor que cualquiera.</p>
+                
+                <p>Increíblemente, siempre me gusta imaginarte así: sonriendo y alegrando el lugar a donde vayas. Que nadie te quite esa luz y que ese brillo sea eterno en ti; un brillo hermoso que ilumina la vida de cualquiera. Cómo sientes y cómo amas siempre es un sentimiento que va más allá de lo romántico; es algo profundo y real, y eso te hace genuino e irremplazable.</p>
+                
+                <p>Espero que tengas un día hermoso. Este es un pequeño regalo que quiero darte con mi primera paga... ¡Ya tienes una cita conmigo en un futuro para sonreír juntos! Así que cuídate mucho hasta ese día y toda tu vida.</p>
+                
+                <div class="signature-row">
+                    <p style="text-align: right; font-weight: bold; margin:0;">— INKY</p>
+                    <img src="¡Feliz Cumpleaños mi amado hermano!_files/deco3.jpeg" alt="Decoración" class="signature-image">
+                </div>
+            </div>
+
+            <button class="btn-reveal" onclick="showCarousel()">Ver mi galería 📷</button>
+            
+            <div id="carousel" class="carousel">
+                <h3 style="color: #333; margin-bottom: 25px;">Imágenes que me recuerdan a ti</h3>
+                <!-- ✅ RUTA CORREGIDA: nombre simple sin espacios -->
+                <img id="carousel-image" src="fotos/foto1.jpeg" alt="Imagen 1">
+                <div class="carousel-controls">
+                    <button type="button" onclick="prevSlide()">Anterior</button>
+                    <button type="button" onclick="nextSlide()">Siguiente</button>
+                </div>
+                <div id="carousel-indicator" class="carousel-indicator">1 / 8</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let attempts = 0;
+        const maxAttempts = 12;
+        const gift = document.getElementById('gift-container');
+        const message = document.getElementById('message');
+        
+        const phrases = [
+            "¡Muy lentooo! waaaaa", 
+            "¡Casi jaaaa!", 
+            "¿Eso es todo? ", 
+            "¡Uyy por poco!", 
+            "¡Sigue intentando ya casi!",
+            "¡Nop!",
+            "¡Frío, frío  si o si!",
+            "¡Más rápido Hermanito! ✨",
+            "¿Tan rápido te cansas?",
+            "¡Dale Mer!",
+            "¡La última y lo atrapas!",
+            "¡Lo tienes!"
+        ];
+
+        function moveGift() {
+            if (attempts < maxAttempts) {
+                const x = Math.random() * (window.innerWidth - 150);
+                const y = Math.random() * (window.innerHeight - 150);
+                
+                gift.style.position = 'fixed';
+                gift.style.left = x + 'px';
+                gift.style.top = y + 'px';
+                gift.style.transform = 'translate(0, 0)';
+                
+                message.innerText = phrases[attempts];
+                attempts++;
+            } else {
+                message.innerText = "¡ATRAPADO jaja! 🎁 Haz click para abrir";
+                gift.style.animation = "none";
+                gift.style.transform = "scale(1.2)";
+            }
+        }
+
+        gift.addEventListener('mouseenter', moveGift);
+
+        gift.addEventListener('click', () => {
+            if(attempts >= maxAttempts) {
+                document.getElementById('overlay').style.display = 'flex';
+                document.getElementById('birthdayMusic').play();
+            }
+        });
+
+        function openLetter() {
+            document.getElementById('envelope').style.display = 'none';
+            document.getElementById('letter').style.display = 'block';
+            showCarousel();
+        }
+
+        const carouselImages = [
+            'fotos/foto1.jpeg',
+            'fotos/foto2.jpeg',
+            'fotos/foto3.jpeg',
+            'fotos/foto4.jpeg',
+            'fotos/foto5.jpeg',
+            'fotos/foto6.jpeg',
+            'fotos/foto7.jpeg',
+            'fotos/foto8.jpeg'
+        ];
+        let currentSlide = 0;
+
+        function showCarousel() {
+            const c = document.getElementById('carousel');
+            c.style.display = 'block';
+            updateCarousel();
+            document.getElementById('letter').scrollTo({
+                top: document.getElementById('letter').scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+
+        function updateCarousel() {
+            const image = document.getElementById('carousel-image');
+            const indicator = document.getElementById('carousel-indicator');
+            image.src = carouselImages[currentSlide];
+            indicator.innerText = `${currentSlide + 1} / ${carouselImages.length}`;
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + carouselImages.length) % carouselImages.length;
+            updateCarousel();
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % carouselImages.length;
+            updateCarousel();
+        }
+    </script>
+</body>
+</html>
